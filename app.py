@@ -191,9 +191,12 @@ def angle_between(v1, v2):
     return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))/np.pi*180
 
 @app.route('/pred', methods=['POST']) 
-def infer():
+def test():
     if request.method == 'POST':
-        video = request.files['video']
+        file = request.files['video']
+        file.save('src/'+file.filename)
+        video = 'src/'+file.filename
+        
         net = PoseEstimationWithMobileNet()
         checkpoint = torch.load("src/weight.pth", map_location=torch.device('cpu'))
         load_state(net, checkpoint)
