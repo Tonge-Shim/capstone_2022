@@ -6,6 +6,7 @@ from . import login_manager
 from datetime import datetime
 import hashlib
 
+
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key = True)
@@ -22,7 +23,11 @@ class Post(db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    angle_result = db.Column(db.Float)
+    rom = db.Column(db.Float)
+    jp = db.Column(db.Float)
+    height = db.Column(db.Float)
+    weight = db.Column(db.Float)
+
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -39,12 +44,14 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
     posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
     avatar_hash = db.Column(db.String(32))
+    confirmed = db.Column(db.Boolean, default = True)
 
     def __init__(self, **kwargs):
         if self.email is not None and self.avatar_hash is None:
             self.avatar_hash = self.gravatar_hash()
+
     def gravatar_hash(self):
-        return hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+        return hashlib.md5(self.email.encode('utf-8')).hexdigest()
 
     @property
     def password(self):
@@ -74,7 +81,25 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
+class JIresult(db.Model):
+    id = db.Column('id', db.Integer, primary_key=True)
+    date = db.Column(db.String)
+    time = db.Column(db.String)
+    rom = db.Column(db.Float)
+    jp = db.Column(db.Float)
+    height = db.Column(db.Float)
+    weight = db.Column(db.Float)
+
+    def __init__(self, date, time, rom, jp, height, weight):
+        self.date = date
+        self.time = time
+        self.rom = rom
+        self.jp = jp
+        self.height = height
+        self.weight = weight

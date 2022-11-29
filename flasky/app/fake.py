@@ -4,6 +4,7 @@ from faker import Faker
 from . import db
 from .models import User, Post
 
+
 def users(count=100):
     fake = Faker()
     i = 0
@@ -11,11 +12,11 @@ def users(count=100):
         u = User(email=fake.email(),
                  username=fake.user_name(),
                  password='password',
+                 confirmed=True,
                  name=fake.name(),
                  location=fake.city(),
                  about_me=fake.text(),
-                 member_since=fake.past_date(),
-                 height = 165)
+                 member_since=fake.past_date())
         db.session.add(u)
         try:
             db.session.commit()

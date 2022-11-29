@@ -14,6 +14,7 @@ class EditProfileForm(FlaskForm):
     location = StringField('Location', validators=[Length(0, 64)])
     about_me = TextAreaField('About me')
     height = FloatField('Height')
+    weight = FloatField('Weight')
     submit = SubmitField('Submit')
 
 
