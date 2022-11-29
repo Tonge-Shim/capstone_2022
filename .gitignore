@@ -1,1 +1,6 @@
+flasky/bin/*
+flasky/migrations/*
+flasky/lib/*
 *.ipynb
+flasky/videos/*
+flasky/share/*
